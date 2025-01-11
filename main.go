@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+        "time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -91,15 +92,16 @@ func main() {
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: router,
-                //Handler: http.DefaultServeMux,
                 ReadHeaderTimeout: 10 * time.Second, // Set this to a reasonable value
-		// Optional: Configure other timeouts for additional protection
-		ReadTimeout:       30 * time.Second,
-		WriteTimeout:      30 * time.Second,
-		IdleTimeout:       60 * time.Second,
+                WriteTimeout:      15 * time.Second, // Timeout za slanje odgovora
 	}
 
-	log.Printf("Serving on port: %s\n", port)
-	log.Fatal(srv.ListenAndServe())
+	//log.Printf("Serving on port: %s\n", port)
+	//log.Fatal(srv.ListenAndServe())
+        	// Pokreni server
+	log.Printf("Server listening on port %s", port)
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }
 
